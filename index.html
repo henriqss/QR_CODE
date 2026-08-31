@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>QR Studio</title>
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* =========================================
+           VARIÁVEIS
+        ========================================= */
+
+        :root {
+
+            --primary: #635bff;
+            --primary-dark: #5148e5;
+
+            --background: #f6f7fb;
+
+            --card: #ffffff;
+
+            --text: #111827;
+            --text-soft: #6b7280;
+
+            --border: #e5e7eb;
+
+            --success: #059669;
+
+            --danger: #dc2626;
+
+            --radius: 18px;
+
+        }
+
+
+        /* =========================================
+           BODY
+        ========================================= */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+
+                radial-gradient(
+                    circle at top left,
+                    rgba(99,91,255,.12),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(37,99,235,.10),
+                    transparent 35%
+                ),
+
+                var(--background);
+
+            color: var(--text);
+
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+
+            padding: 45px 20px 25px;
+
+            text-align: center;
+
+        }
+
+
+        .logo-title {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 54px;
+            height: 54px;
+
+            border-radius: 16px;
+
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #8b5cf6
+            );
+
+            color: white;
+
+            font-size: 25px;
+
+            margin-bottom: 15px;
+
+            box-shadow:
+                0 10px 25px rgba(99,91,255,.25);
+
+        }
+
+
+        header h1 {
+
+            font-size: 34px;
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
+        }
+
+
+        header p {
+
+            margin-top: 8px;
+
+            color: var(--text-soft);
+
+            font-size: 15px;
+
+        }
+
+
+        /* =========================================
+           CONTAINER
+        ========================================= */
+
+        .container {
+
+            width: min(1150px, calc(100% - 30px));
+
+            margin: auto;
+
+            padding-bottom: 50px;
+
+        }
+
+
+        /* =========================================
+           MAIN GRID
+        ========================================= */
+
+        .main {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                420px;
+
+            gap: 25px;
+
+        }
+
+
+        /* =========================================
+           CARD
+        ========================================= */
+
+        .card {
+
+            background: var(--card);
+
+            border: 1px solid rgba(229,231,235,.8);
+
+            border-radius: var(--radius);
+
+            padding: 25px;
+
+            box-shadow:
+                0 15px 45px rgba(17,24,39,.06);
+
+        }
+
+
+        /* =========================================
+           SECTION
+        ========================================= */
+
+        .section {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .section:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .section-title span {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 28px;
+            height: 28px;
+
+            border-radius: 8px;
+
+            background: #f0efff;
+
+            color: var(--primary);
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================================
+           INPUTS
+        ========================================= */
+
+        .field {
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .field:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        input,
+        textarea,
+        select {
+
+            width: 100%;
+
+            border: 1px solid var(--border);
+
+            background: #fff;
+
+            color: var(--text);
+
+            border-radius: 11px;
+
+            padding: 12px 13px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: .2s;
+
+        }
+
+
+        textarea {
+
+            min-height: 115px;
+
+            resize: vertical;
+
+            line-height: 1.5;
+
+        }
+
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 4px rgba(99,91,255,.10);
+
+        }
+
+
+        input[type="file"] {
+
+            padding: 10px;
+
+            cursor: pointer;
+
+        }
+
+
+        input[type="color"] {
+
+            height: 46px;
+
+            padding: 4px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =========================================
+           GRID
+        ========================================= */
+
+        .grid-2 {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+        }
+
+
+        .grid-3 {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr
+                1fr;
+
+            gap: 12px;
+
+        }
+
+
+        /* =========================================
+           TYPE SELECTOR
+        ========================================= */
+
+        .types {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+
+        }
+
+
+        .type {
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 13px 8px;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            transition: .2s;
+
+        }
+
+
+        .type:hover {
+
+            transform: translateY(-1px);
+
+            border-color: #c7c3ff;
+
+        }
+
+
+        .type.active {
+
+            border-color: var(--primary);
+
+            background: #f4f3ff;
+
+            color: var(--primary);
+
+        }
+
+
+        .type-icon {
+
+            font-size: 21px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .type-name {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================================
+           LOGO PREVIEW
+        ========================================= */
+
+        .logo-upload {
+
+            display: flex;
+
+            gap: 15px;
+
+            align-items: center;
+
+        }
+
+
+        .logo-preview {
+
+            width: 65px;
+            height: 65px;
+
+            border-radius: 12px;
+
+            border: 1px dashed var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+            background: #fafafa;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .logo-preview img {
+
+            max-width: 100%;
+
+            max-height: 100%;
+
+            object-fit: contain;
+
+        }
+
+
+        .logo-empty {
+
+            color: #9ca3af;
+
+            font-size: 20px;
+
+        }
+
+
+        /* =========================================
+           BUTTONS
+        ========================================= */
+
+        .buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+
+        button,
+        .download {
+
+            border: none;
+
+            border-radius: 11px;
+
+            padding: 13px 18px;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+            text-decoration: none;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+        }
+
+
+        .primary {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #7c3aed
+                );
+
+            color: white;
+
+            flex: 1;
+
+            box-shadow:
+                0 8px 20px rgba(99,91,255,.22);
+
+        }
+
+
+        .primary:hover {
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 12px 25px rgba(99,91,255,.28);
+
+        }
+
+
+        .secondary {
+
+            background: #f3f4f6;
+
+            color: #374151;
+
+        }
+
+
+        .secondary:hover {
+
+            background: #e5e7eb;
+
+        }
+
+
+        /* =========================================
+           PREVIEW
+        ========================================= */
+
+        .preview-card {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 100%;
+
+        }
+
+
+        .preview-label {
+
+            width: 100%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .preview-label strong {
+
+            font-size: 15px;
+
+        }
+
+
+        .badge {
+
+            background: #ecfdf5;
+
+            color: var(--success);
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+        }
+
+
+        .qr-wrapper {
+
+            width: min(340px, 100%);
+
+            aspect-ratio: 1;
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 18px;
+
+            border: 1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,.06);
+
+        }
+
+
+        #finalCanvas {
+
+            display: block;
+
+            width: 100%;
+
+            height: 100%;
+
+        }
+
+
+        .preview-info {
+
+            text-align: center;
+
+            color: var(--text-soft);
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            margin-top: 14px;
+
+        }
+
+
+        .preview-actions {
+
+            display: flex;
+
+            width: min(340px, 100%);
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+        }
+
+
+        .download {
+
+            background: var(--primary);
+
+            color: white;
+
+            flex: 1;
+
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status {
+
+            width: min(340px, 100%);
+
+            padding: 10px 12px;
+
+            margin-top: 12px;
+
+            border-radius: 10px;
+
+            background: #f3f4f6;
+
+            color: #6b7280;
+
+            text-align: center;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =========================================
+           HIDDEN
+        ========================================= */
+
+        .hidden {
+
+            display: none !important;
+
+        }
+
+
+        /* =========================================
+           HINT
+        ========================================= */
+
+        .hint {
+
+            color: #9ca3af;
+
+            font-size: 11px;
+
+            line-height: 1.45;
+
+            margin-top: 6px;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 25px 10px;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =========================================
+           QR TEMPORÁRIO
+        ========================================= */
+
+        #qrGenerator {
+
+            position: absolute;
+
+            left: -99999px;
+
+            top: -99999px;
+
+            opacity: 0;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVO
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .main {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            header {
+
+                padding-top: 30px;
+
+            }
+
+
+            header h1 {
+
+                font-size: 27px;
+
+            }
+
+
+            .container {
+
+                width: min(
+                    100% - 20px,
+                    600px
+                );
+
+            }
+
+
+            .card {
+
+                padding: 18px;
+
+            }
+
+
+            .grid-2,
+            .grid-3 {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .types {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+
+            }
+
+
+            .buttons {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo-title">
+        ▦
+    </div>
+
+    <h1>
+        QR Studio
+    </h1>
+
+    <p>
+        Crie QR Codes personalizados com sua própria identidade.
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <main class="main">
+
+
+        <!-- =====================================
+             CONFIGURAÇÕES
+        ====================================== -->
+
+        <section class="card">
+
+
+            <!-- TIPO -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    <span>1</span>
+
+                    Tipo de QR Code
+
+                </div>
+
+
+                <div class="types">
+
+
+                    <div
+                        class="type active"
+                        data-type="texto"
+                    >
+
+                        <div class="type-icon">
+                            🔗
+                        </div>
+
+                        <div class="type-name">
+                            Texto / URL
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="type"
+                        data-type="wifi"
+                    >
+
+                        <div class="type-icon">
+                            📶
+                        </div>
+
+                        <div class="type-name">
+                            Wi-Fi
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="type"
+                        data-type="pix"
+                    >
+
+                        <div class="type-icon">
+                            💰
+                        </div>
+
+                        <div class="type-name">
+                            PIX
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- TEXTO -->
+
+            <div
+                id="textoArea"
+                class="section"
+            >
+
+                <div class="section-title">
+
+                    <span>2</span>
+
+                    Conteúdo
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Texto ou URL
+                    </label>
+
+                    <textarea
+                        id="conteudo"
+                        placeholder="Digite um texto ou cole uma URL..."
+                    >https://www.google.com</textarea>
+
+                    <div class="hint">
+                        Exemplo: https://seusite.com.br
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- WIFI -->
+
+            <div
+                id="wifiArea"
+                class="section hidden"
+            >
+
+                <div class="section-title">
+
+                    <span>2</span>
+
+                    Dados da rede Wi-Fi
+
+                </div>
+
+
+                <div class="grid-2">
+
+
+                    <div class="field">
+
+                        <label>
+                            Nome da rede
+                        </label>
+
+                        <input
+                            id="wifiNome"
+                            type="text"
+                            placeholder="Minha Wi-Fi"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Senha
+                        </label>
+
+                        <input
+                            id="wifiSenha"
+                            type="text"
+                            placeholder="Senha"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Segurança
+                    </label>
+
+                    <select id="wifiSeguranca">
+
+                        <option value="WPA">
+                            WPA / WPA2 / WPA3
+                        </option>
+
+                        <option value="WEP">
+                            WEP
+                        </option>
+
+                        <option value="nopass">
+                            Sem senha
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- PIX -->
+
+            <div
+                id="pixArea"
+                class="section hidden"
+            >
+
+                <div class="section-title">
+
+                    <span>2</span>
+
+                    Dados do PIX
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Chave PIX
+                    </label>
+
+                    <input
+                        id="pixChave"
+                        type="text"
+                        placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
+                    >
+
+                </div>
+
+
+                <div class="grid-2">
+
+
+                    <div class="field">
+
+                        <label>
+                            Nome
+                        </label>
+
+                        <input
+                            id="pixNome"
+                            type="text"
+                            placeholder="Nome do recebedor"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Cidade
+                        </label>
+
+                        <input
+                            id="pixCidade"
+                            type="text"
+                            placeholder="RECIFE"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="grid-2">
+
+
+                    <div class="field">
+
+                        <label>
+                            Valor
+                        </label>
+
+                        <input
+                            id="pixValor"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="Opcional"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            TXID
+                        </label>
+
+                        <input
+                            id="pixTxid"
+                            type="text"
+                            value="***"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="hint">
+
+                    Para PIX dinâmico é necessário utilizar o
+                    payload fornecido pelo banco ou PSP.
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGO -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    <span>3</span>
+
+                    Logo / Símbolo
+
+                </div>
+
+
+                <div class="logo-upload">
+
+
+                    <div class="logo-preview">
+
+                        <span
+                            id="logoEmpty"
+                            class="logo-empty"
+                        >
+                            +
+                        </span>
+
+                        <img
+                            id="logoPreview"
+                            class="hidden"
+                            alt="Logo"
+                        >
+
+                    </div>
+
+
+                    <div style="flex:1">
+
+                        <input
+                            id="logo"
+                            type="file"
+                            accept="image/*"
+                        >
+
+                        <div class="hint">
+                            PNG transparente é recomendado.
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- APARÊNCIA -->
+
+            <div class="section">
+
+                <div class="section-title">
+
+                    <span>4</span>
+
+                    Personalização
+
+                </div>
+
+
+                <div class="grid-3">
+
+
+                    <div class="field">
+
+                        <label>
+                            QR Code
+                        </label>
+
+                        <input
+                            id="corQR"
+                            type="color"
+                            value="#000000"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Fundo
+                        </label>
+
+                        <input
+                            id="corFundo"
+                            type="color"
+                            value="#ffffff"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Fundo da logo
+                        </label>
+
+                        <input
+                            id="corBorda"
+                            type="color"
+                            value="#ffffff"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="grid-2">
+
+
+                    <div class="field">
+
+                        <label>
+                            Tamanho da logo
+                        </label>
+
+                        <input
+                            id="tamanhoLogo"
+                            type="number"
+                            min="8"
+                            max="28"
+                            value="20"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Formato da logo
+                        </label>
+
+                        <select id="arredondarLogo">
+
+                            <option value="0">
+                                Quadrado
+                            </option>
+
+                            <option value="20">
+                                Arredondado
+                            </option>
+
+                            <option value="50">
+                                Circular
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="buttons">
+
+                <button
+                    id="gerarBtn"
+                    class="primary"
+                >
+
+                    ✨ Gerar QR Code
+
+                </button>
+
+
+                <button
+                    id="limparBtn"
+                    class="secondary"
+                >
+
+                    Limpar
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             PREVIEW
+        ====================================== -->
+
+        <section class="card preview-card">
+
+
+            <div class="preview-label">
+
+                <strong>
+                    Pré-visualização
+                </strong>
+
+                <span class="badge">
+                    ● PRONTO
+                </span>
+
+            </div>
+
+
+            <div class="qr-wrapper">
+
+                <canvas
+                    id="finalCanvas"
+                    width="900"
+                    height="900"
+                ></canvas>
+
+            </div>
+
+
+            <div class="preview-info">
+
+                Escaneie com a câmera do celular
+                para testar seu QR Code.
+
+            </div>
+
+
+            <div class="preview-actions">
+
+
+                <a
+                    id="downloadBtn"
+                    class="download"
+                    download="qrcode.png"
+                >
+
+                    ⬇ Baixar PNG
+
+                </a>
+
+
+                <button
+                    id="copiarBtn"
+                    class="secondary"
+                >
+
+                    📋 Copiar
+
+                </button>
+
+
+            </div>
+
+
+            <div
+                id="status"
+                class="status"
+            >
+
+                Pronto para gerar seu QR Code.
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        QR Studio · Gerador de QR Code personalizado
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================================
+     BIBLIOTECA QR CODE
+========================================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================
+   ELEMENTOS
+========================================= */
+
+const $ = id => document.getElementById(id);
+
+
+const tipoTexto = $("textoArea");
+const tipoWifi = $("wifiArea");
+const tipoPix = $("pixArea");
+
+const conteudo = $("conteudo");
+
+const logoInput = $("logo");
+const logoPreview = $("logoPreview");
+const logoEmpty = $("logoEmpty");
+
+const finalCanvas = $("finalCanvas");
+
+const ctx =
+    finalCanvas.getContext("2d");
+
+const downloadBtn =
+    $("downloadBtn");
+
+const statusEl =
+    $("status");
+
+let tipoAtual = "texto";
+
+let logoDataURL = null;
+
+
+/* =========================================
+   TIPOS
+========================================= */
+
+document
+    .querySelectorAll(".type")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(".type")
+                    .forEach(item =>
+                        item.classList.remove("active")
+                    );
+
+                button.classList.add("active");
+
+                tipoAtual =
+                    button.dataset.type;
+
+                tipoTexto.classList.toggle(
+                    "hidden",
+                    tipoAtual !== "texto"
+                );
+
+                tipoWifi.classList.toggle(
+                    "hidden",
+                    tipoAtual !== "wifi"
+                );
+
+                tipoPix.classList.toggle(
+                    "hidden",
+                    tipoAtual !== "pix"
+                );
+
+            }
+
+        );
+
+    });
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+logoInput.addEventListener(
+    "change",
+    () => {
+
+        const file =
+            logoInput.files[0];
+
+        if (!file) {
+
+            logoDataURL = null;
+
+            logoPreview.classList.add(
+                "hidden"
+            );
+
+            logoEmpty.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+            alert(
+                "Selecione uma imagem válida."
+            );
+
+            logoInput.value = "";
+
+            return;
+
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = () => {
+
+            logoDataURL =
+                reader.result;
+
+            logoPreview.src =
+                logoDataURL;
+
+            logoPreview.classList.remove(
+                "hidden"
+            );
+
+            logoEmpty.classList.add(
+                "hidden"
+            );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* =========================================
+   WIFI
+========================================= */
+
+function escapeWifi(value) {
+
+    return String(value)
+
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /;/g,
+            "\\;"
+        )
+
+        .replace(
+            /,/g,
+            "\\,"
+        )
+
+        .replace(
+            /:/g,
+            "\\:"
+        );
+
+}
+
+
+/* =========================================
+   PIX
+========================================= */
+
+function removeAccents(value) {
+
+    return String(value)
+
+        .normalize("NFD")
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        );
+
+}
+
+
+function pixField(id, value) {
+
+    value = String(value);
+
+    return (
+        id +
+        String(value.length)
+            .padStart(2, "0") +
+        value
+    );
+
+}
+
+
+function crc16(text) {
+
+    let crc = 0xFFFF;
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        crc ^=
+
+            text.charCodeAt(i)
+            << 8;
+
+
+        for (
+            let j = 0;
+            j < 8;
+            j++
+        ) {
+
+            if (crc & 0x8000) {
+
+                crc =
+                    ((crc << 1)
+                    ^ 0x1021)
+                    & 0xFFFF;
+
+            } else {
+
+                crc =
+                    (crc << 1)
+                    & 0xFFFF;
+
+            }
+
+        }
+
+    }
+
+
+    return crc
+        .toString(16)
+        .toUpperCase()
+        .padStart(4, "0");
+
+}
+
+
+function gerarPix() {
+
+    const chave =
+        $("pixChave")
+        .value
+        .trim();
+
+
+    if (!chave) {
+
+        throw new Error(
+            "Digite a chave PIX."
+        );
+
+    }
+
+
+    let nome =
+        removeAccents(
+            $("pixNome")
+            .value
+            .trim()
+        )
+        .toUpperCase();
+
+
+    let cidade =
+        removeAccents(
+            $("pixCidade")
+            .value
+            .trim()
+        )
+        .toUpperCase();
+
+
+    nome =
+        (nome || "RECEBEDOR")
+        .substring(0, 25);
+
+
+    cidade =
+        (cidade || "CIDADE")
+        .substring(0, 15);
+
+
+    const valor =
+        $("pixValor")
+        .value
+        .trim();
+
+
+    const txid =
+        $("pixTxid")
+        .value
+        .trim()
+        || "***";
+
+
+    const merchant =
+        pixField(
+            "00",
+            "br.gov.bcb.pix"
+        )
+        +
+        pixField(
+            "01",
+            chave
+        );
+
+
+    let payload = "";
+
+
+    payload +=
+        pixField(
+            "00",
+            "01"
+        );
+
+
+    payload +=
+        pixField(
+            "26",
+            merchant
+        );
+
+
+    payload +=
+        pixField(
+            "52",
+            "0000"
+        );
+
+
+    payload +=
+        pixField(
+            "53",
+            "986"
+        );
+
+
+    if (valor) {
+
+        const numero =
+            Number(valor);
+
+
+        if (
+            !Number.isFinite(numero)
+            || numero <= 0
+        ) {
+
+            throw new Error(
+                "Digite um valor PIX válido."
+            );
+
+        }
+
+
+        payload +=
+            pixField(
+                "54",
+                numero.toFixed(2)
+            );
+
+    }
+
+
+    payload +=
+        pixField(
+            "58",
+            "BR"
+        );
+
+
+    payload +=
+        pixField(
+            "59",
+            nome
+        );
+
+
+    payload +=
+        pixField(
+            "60",
+            cidade
+        );
+
+
+    payload +=
+        pixField(
+            "62",
+            pixField(
+                "05",
+                txid.substring(0, 25)
+            )
+        );
+
+
+    const semCRC =
+        payload + "6304";
+
+
+    return (
+        semCRC +
+        crc16(semCRC)
+    );
+
+}
+
+
+/* =========================================
+   PAYLOAD
+========================================= */
+
+function obterPayload() {
+
+
+    if (tipoAtual === "texto") {
+
+        const texto =
+            conteudo.value.trim();
+
+
+        if (!texto) {
+
+            throw new Error(
+                "Digite um texto ou URL."
+            );
+
+        }
+
+
+        return texto;
+
+    }
+
+
+    if (tipoAtual === "wifi") {
+
+        const ssid =
+            $("wifiNome")
+            .value
+            .trim();
+
+
+        const senha =
+            $("wifiSenha")
+            .value;
+
+
+        const seguranca =
+            $("wifiSeguranca")
+            .value;
+
+
+        if (!ssid) {
+
+            throw new Error(
+                "Digite o nome da rede Wi-Fi."
+            );
+
+        }
+
+
+        if (
+            seguranca !== "nopass"
+            && !senha
+        ) {
+
+            throw new Error(
+                "Digite a senha do Wi-Fi."
+            );
+
+        }
+
+
+        return (
+
+            "WIFI:" +
+
+            "T:" +
+            seguranca +
+            ";" +
+
+            "S:" +
+            escapeWifi(ssid) +
+            ";" +
+
+            "P:" +
+            escapeWifi(senha) +
+            ";" +
+
+            "H:false;;"
+
+        );
+
+    }
+
+
+    if (tipoAtual === "pix") {
+
+        return gerarPix();
+
+    }
+
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+function desenharLogo() {
+
+    if (!logoDataURL) {
+
+        atualizarDownload();
+
+        return Promise.resolve();
+
+    }
+
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const img =
+                new Image();
+
+
+            img.onload = () => {
+
+                const percentual =
+                    Math.min(
+                        28,
+                        Math.max(
+                            8,
+                            Number(
+                                $("tamanhoLogo")
+                                .value
+                            ) || 20
+                        )
+                    ) / 100;
+
+
+                const tamanho =
+                    finalCanvas.width *
+                    percentual;
+
+
+                const x =
+                    (
+                        finalCanvas.width -
+                        tamanho
+                    ) / 2;
+
+
+                const y =
+                    (
+                        finalCanvas.height -
+                        tamanho
+                    ) / 2;
+
+
+                const borda =
+                    tamanho * .10;
+
+
+                const bx =
+                    x - borda;
+
+
+                const by =
+                    y - borda;
+
+
+                const bw =
+                    tamanho +
+                    borda * 2;
+
+
+                const bh =
+                    tamanho +
+                    borda * 2;
+
+
+                const formato =
+                    Number(
+                        $("arredondarLogo")
+                        .value
+                    );
+
+
+                /* Fundo */
+
+                ctx.save();
+
+
+                ctx.beginPath();
+
+
+                if (formato === 50) {
+
+                    ctx.arc(
+
+                        finalCanvas.width / 2,
+
+                        finalCanvas.height / 2,
+
+                        bw / 2,
+
+                        0,
+
+                        Math.PI * 2
+
+                    );
+
+                } else {
+
+                    const radius =
+                        formato === 20
+                        ? 18
+                        : 0;
+
+
+                    ctx.roundRect(
+
+                        bx,
+                        by,
+                        bw,
+                        bh,
+                        radius
+
+                    );
+
+                }
+
+
+                ctx.fillStyle =
+                    $("corBorda")
+                    .value;
+
+
+                ctx.fill();
+
+
+                ctx.restore();
+
+
+                /* Proporção */
+
+                const ratio =
+                    Math.min(
+
+                        tamanho /
+                        img.width,
+
+                        tamanho /
+                        img.height
+
+                    );
+
+
+                const w =
+                    img.width *
+                    ratio;
+
+
+                const h =
+                    img.height *
+                    ratio;
+
+
+                const ix =
+                    (
+                        finalCanvas.width -
+                        w
+                    ) / 2;
+
+
+                const iy =
+                    (
+                        finalCanvas.height -
+                        h
+                    ) / 2;
+
+
+                /* Imagem */
+
+                if (formato === 50) {
+
+                    ctx.save();
+
+
+                    ctx.beginPath();
+
+
+                    ctx.arc(
+
+                        finalCanvas.width / 2,
+
+                        finalCanvas.height / 2,
+
+                        tamanho / 2,
+
+                        0,
+
+                        Math.PI * 2
+
+                    );
+
+
+                    ctx.clip();
+
+
+                    ctx.drawImage(
+                        img,
+                        ix,
+                        iy,
+                        w,
+                        h
+                    );
+
+
+                    ctx.restore();
+
+                } else {
+
+                    ctx.drawImage(
+                        img,
+                        ix,
+                        iy,
+                        w,
+                        h
+                    );
+
+                }
+
+
+                atualizarDownload();
+
+                resolve();
+
+            };
+
+
+            img.onerror =
+                reject;
+
+
+            img.src =
+                logoDataURL;
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   DOWNLOAD
+========================================= */
+
+function atualizarDownload() {
+
+    downloadBtn.href =
+        finalCanvas
+        .toDataURL("image/png");
+
+}
+
+
+/* =========================================
+   GERAR
+========================================= */
+
+async function gerarQRCode() {
+
+    try {
+
+        statusEl.textContent =
+            "Gerando QR Code...";
+
+
+        statusEl.style.background =
+            "#f3f4f6";
+
+
+        statusEl.style.color =
+            "#6b7280";
+
+
+        if (
+            typeof QRCode ===
+            "undefined"
+        ) {
+
+            throw new Error(
+                "Não foi possível carregar a biblioteca do QR Code. Verifique sua conexão com a internet."
+            );
+
+        }
+
+
+        const payload =
+            obterPayload();
+
+
+        const container =
+            document.createElement(
+                "div"
+            );
+
+
+        container.id =
+            "qrGenerator";
+
+
+        document.body.appendChild(
+            container
+        );
+
+
+        new QRCode(
+            container,
+            {
+
+                text: payload,
+
+                width: 900,
+
+                height: 900,
+
+                colorDark:
+                    $("corQR").value,
+
+                colorLight:
+                    $("corFundo").value,
+
+                correctLevel:
+                    QRCode.CorrectLevel.H
+
+            }
+        );
+
+
+        await new Promise(
+            resolve =>
+                setTimeout(
+                    resolve,
+                    100
+                )
+        );
+
+
+        const qrCanvas =
+            container.querySelector(
+                "canvas"
+            );
+
+
+        const qrImage =
+            container.querySelector(
+                "img"
+            );
+
+
+        ctx.clearRect(
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height
+        );
+
+
+        if (qrCanvas) {
+
+            ctx.drawImage(
+
+                qrCanvas,
+
+                0,
+                0,
+
+                finalCanvas.width,
+                finalCanvas.height
+
+            );
+
+        }
+
+
+        else if (qrImage) {
+
+            await new Promise(
+                (resolve, reject) => {
+
+                    const img =
+                        new Image();
+
+
+                    img.onload = () => {
+
+                        ctx.drawImage(
+
+                            img,
+
+                            0,
+                            0,
+
+                            finalCanvas.width,
+                            finalCanvas.height
+
+                        );
+
+                        resolve();
+
+                    };
+
+
+                    img.onerror =
+                        reject;
+
+
+                    img.src =
+                        qrImage.src;
+
+                }
+            );
+
+        }
+
+
+        else {
+
+            throw new Error(
+                "Não foi possível gerar o QR Code."
+            );
+
+        }
+
+
+        container.remove();
+
+
+        await desenharLogo();
+
+
+        statusEl.textContent =
+            "QR Code gerado com sucesso!";
+
+
+        statusEl.style.background =
+            "#ecfdf5";
+
+
+        statusEl.style.color =
+            "#059669";
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        statusEl.textContent =
+            error.message ||
+            "Erro ao gerar QR Code.";
+
+
+        statusEl.style.background =
+            "#fef2f2";
+
+
+        statusEl.style.color =
+            "#dc2626";
+
+    }
+
+}
+
+
+/* =========================================
+   LIMPAR
+========================================= */
+
+$("limparBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            conteudo.value = "";
+
+            $("wifiNome").value = "";
+            $("wifiSenha").value = "";
+
+            $("pixChave").value = "";
+            $("pixNome").value = "";
+            $("pixCidade").value = "";
+            $("pixValor").value = "";
+            $("pixTxid").value = "***";
+
+
+            logoInput.value = "";
+
+            logoDataURL = null;
+
+
+            logoPreview
+                .classList
+                .add("hidden");
+
+
+            logoEmpty
+                .classList
+                .remove("hidden");
+
+
+            ctx.clearRect(
+                0,
+                0,
+                finalCanvas.width,
+                finalCanvas.height
+            );
+
+
+            ctx.fillStyle =
+                $("corFundo").value;
+
+
+            ctx.fillRect(
+                0,
+                0,
+                finalCanvas.width,
+                finalCanvas.height
+            );
+
+
+            downloadBtn
+                .removeAttribute("href");
+
+
+            statusEl.textContent =
+                "Pronto para gerar seu QR Code.";
+
+
+            statusEl.style.background =
+                "#f3f4f6";
+
+
+            statusEl.style.color =
+                "#6b7280";
+
+        }
+    );
+
+
+/* =========================================
+   COPIAR
+========================================= */
+
+$("copiarBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                if (
+                    !navigator.clipboard ||
+                    typeof ClipboardItem ===
+                    "undefined"
+                ) {
+
+                    throw new Error();
+
+                }
+
+
+                const blob =
+                    await new Promise(
+                        resolve => {
+
+                            finalCanvas.toBlob(
+                                resolve,
+                                "image/png"
+                            );
+
+                        }
+                    );
+
+
+                await navigator.clipboard.write([
+
+                    new ClipboardItem({
+
+                        "image/png":
+                            blob
+
+                    })
+
+                ]);
+
+
+                statusEl.textContent =
+                    "QR Code copiado!";
+
+
+                statusEl.style.background =
+                    "#ecfdf5";
+
+
+                statusEl.style.color =
+                    "#059669";
+
+            }
+
+            catch {
+
+                statusEl.textContent =
+                    "Seu navegador não permite copiar diretamente. Baixe o PNG.";
+
+            }
+
+        }
+    );
+
+
+/* =========================================
+   GERAR
+========================================= */
+
+$("gerarBtn")
+    .addEventListener(
+        "click",
+        gerarQRCode
+    );
+
+
+/* =========================================
+   INICIALIZAÇÃO
+========================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        /*
+         * Fundo inicial
+         */
+
+        ctx.fillStyle =
+            "#ffffff";
+
+
+        ctx.fillRect(
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height
+        );
+
+
+        /*
+         * Tenta gerar o exemplo
+         */
+
+        setTimeout(
+            gerarQRCode,
+            300
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
